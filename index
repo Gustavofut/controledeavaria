@@ -2,176 +2,136 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Registro de Avaria</title>
+  <title>Formulário de Auditoria</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f4f6f8;
       display: flex;
       justify-content: center;
-      padding: 50px;
+      padding: 40px;
     }
-    .form-container {
+    form {
       background: white;
-      padding: 20px 30px;
+      padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 400px;
+      width: 420px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      margin-top: 10px;
-      font-weight: bold;
-    }
+    h2 { text-align: center; }
+    label { font-weight: bold; display: block; margin-top: 10px; }
     input, select {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
+      width: 100%; padding: 8px; margin-top: 5px;
+      border: 1px solid #ccc; border-radius: 5px;
     }
     button {
       margin-top: 20px;
-      width: 100%;
-      padding: 10px;
-      background: #0d3b66;
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
+      background: #007BFF; color: white;
+      padding: 10px; border: none; border-radius: 5px;
       cursor: pointer;
+      width: 100%;
     }
-    button:hover {
-      background: #0a2a4c;
-    }
-    .success-message {
+    button:hover { background: #0056b3; }
+    .success {
+      margin-top: 15px;
+      padding: 10px;
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      border-radius: 5px;
       display: none;
-      margin-top: 10px;
       text-align: center;
-      color: green;
-      font-weight: bold;
+    }
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 13px;
+      color: #555;
     }
   </style>
 </head>
 <body>
+  <div>
+    <form id="auditoriaForm">
+      <h2>Registro de Auditoria</h2>
 
-<div class="form-container">
-  <h2>REGISTRO DE AVARIA</h2>
+      <label>OR:</label>
+      <input type="text" name="or" required>
 
-  <label for="data">Data</label>
-  <input type="date" id="data" required>
+      <label>Nota Fiscal:</label>
+      <input type="text" name="notaFiscal" required>
 
-  <label for="or">OR</label>
-  <input type="text" id="or" required>
+      <label>Produto:</label>
+      <input type="text" name="produto" required>
 
-  <label for="nota">Nota Fiscal</label>
-  <input type="text" id="nota" required>
+      <label>Fornecedor:</label>
+      <input type="text" name="fornecedor" required>
 
-  <label for="produto">Produto</label>
-  <input type="text" id="produto" required>
+      <label>Marca:</label>
+      <input type="text" name="marca">
 
-  <label for="fornecedor">Fornecedor</label>
-  <input type="text" id="fornecedor" required>
+      <label>Tipo de Avaria:</label>
+      <select name="tipoAvaria" required>
+        <option value="">Selecione...</option>
+        <option value="MANCHA">MANCHA</option>
+        <option value="MOFO">MOFO</option>
+        <option value="RASGO">RASGO</option>
+        <option value="DESCOSTURA">DESCOSTURA</option>
+        <option value="EXCESSO DE COLA">EXCESSO DE COLA</option>
+        <option value="SOLADO DANIFICADO">SOLADO DANIFICADO</option>
+        <option value="DIVERGENCIA DE TAMANHO">DIVERGENCIA DE TAMANHO</option>
+        <option value="DIVERGENCIA DE MODELO">DIVERGENCIA DE MODELO</option>
+        <option value="LOGO DANIFICADO">LOGO DANIFICADO</option>
+        <option value="FALTA">FALTA</option>
+        <option value="VALIDADE">VALIDADE</option>
+      </select>
 
-  <label for="marca">Marca</label>
-  <input type="text" id="marca" required>
+      <label>Responsável:</label>
+      <input type="text" name="responsavel" required>
 
-  <label for="tipoAvaria">Tipo de Avaria</label>
-  <select id="tipoAvaria" required>
-    <option value="">Selecione...</option>
-    <option>MANCHA</option>
-    <option>MOFO</option>
-    <option>RASGO</option>
-    <option>DESCOSTURA</option>
-    <option>EXCESSO DE COLA</option>
-    <option>SOLADO DANIFICADO</option>
-    <option>DIVERGENCIA DE TAMANHO</option>
-    <option>DIVERGENCIA DE MODELO</option>
-    <option>LOGO DANIFICADO</option>
-    <option>FALTA</option>
-    <option>VALIDADE</option>
-  </select>
+      <label>Quantidade:</label>
+      <input type="number" name="qntd" required>
 
-  <label for="responsavel">Responsável</label>
-  <input type="text" id="responsavel" required>
+      <label>Categoria:</label>
+      <select name="categoria" required>
+        <option value="">Selecione...</option>
+        <option value="CALÇADO">CALÇADO</option>
+        <option value="VESTUARIO">VESTUÁRIO</option>
+        <option value="ACESSORIO">ACESSÓRIO</option>
+        <option value="SUPLEMENTO">SUPLEMENTO</option>
+      </select>
 
-  <label for="qntd">Quantidade</label>
-  <input type="number" id="qntd" required min="1">
+      <button type="submit">Enviar</button>
+      <div id="msg" class="success">Registro enviado com sucesso!</div>
+    </form>
 
-  <label for="categoria">Categoria</label>
-  <select id="categoria" required>
-    <option value="">Selecione...</option>
-    <option>CALÇADO</option>
-    <option>VESTUARIO</option>
-    <option>ACESSORIO</option>
-    <option>SUPLEMENTO</option>
-  </select>
+    <footer>
+      Desenvolvido para Controle de Auditoria © 2025
+    </footer>
+  </div>
 
-  <label for="scriptUrl">URL do App Script</label>
-  <input type="text" id="scriptUrl" placeholder="https://script.google.com/macros/s/AKfycbxaGwWwTlJ7wBMIjxHUI55XnbCR_KYg0DOOLf10u3SrbWyMK8kI-Xtpv_3HMADeZXYvhA/exec" required>
+  <script>
+    const form = document.getElementById("auditoriaForm");
+    const msg = document.getElementById("msg");
 
-  <button type="button" onclick="enviarFormulario()">Enviar</button>
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
 
-  <div class="success-message" id="successMessage">Registro realizado com sucesso!</div>
-</div>
+      const data = Object.fromEntries(new FormData(form).entries());
 
-<script>
-  function enviarFormulario() {
-    const data = document.getElementById('data').value;
-    const or = document.getElementById('or').value;
-    const nota = document.getElementById('nota').value;
-    const produto = document.getElementById('produto').value;
-    const fornecedor = document.getElementById('fornecedor').value;
-    const marca = document.getElementById('marca').value;
-    const tipoAvaria = document.getElementById('tipoAvaria').value;
-    const responsavel = document.getElementById('responsavel').value;
-    const qntd = document.getElementById('qntd').value;
-    const categoria = document.getElementById('categoria').value;
-    const scriptUrl = document.getElementById('scriptUrl').value;
-
-    if (!data || !or || !nota || !produto || !fornecedor || !marca || !tipoAvaria || !responsavel || !qntd || !categoria || !scriptUrl) {
-      alert("Preencha todos os campos!");
-      return;
-    }
-
-    const payload = {
-      Data: data,
-      OR: or,
-      NotaFiscal: nota,
-      Produto: produto,
-      Fornecedor: fornecedor,
-      Marca: marca,
-      TipoDeAvaria: tipoAvaria,
-      Responsavel: responsavel,
-      Qntd: qntd,
-      Categoria: categoria
-    };
-
-    fetch(scriptUrl, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-      headers: { 'Content-Type': 'application/json' }
-    })
-    .then(response => {
-      if (response.ok) {
-        document.getElementById('successMessage').style.display = 'block';
-        document.querySelectorAll('input, select').forEach(el => el.value = '');
-      } else {
-        alert('Erro ao enviar. Verifique o URL do App Script.');
-      }
-    })
-    .catch(error => {
-      console.error(error);
-      alert('Erro ao enviar. Verifique o URL do App Script.');
+      fetch("https://script.google.com/macros/s/AKfycbxaGwWwTlJ7wBMIjxHUI55XnbCR_KYg0DOOLf10u3SrbWyMK8kI-Xtpv_3HMADeZXYvhA/exec", {
+        method: "POST",
+        body: JSON.stringify(data)
+      })
+      .then(res => res.text())
+      .then(txt => {
+        form.reset(); // limpa os campos
+        msg.style.display = "block"; // mostra aviso de sucesso
+        setTimeout(() => msg.style.display = "none", 3000); // some depois de 3s
+      })
+      .catch(err => alert("Erro ao enviar: " + err));
     });
-  }
-</script>
-
+  </script>
 </body>
 </html>
 
