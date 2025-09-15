@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Registro de Avaria</title>
+<style>
+  :root{
+    --blue:#123b5a;
+    --light:#f5f6f7;
+    --muted:#666;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family: "Segoe UI", Roboto, Arial, sans-serif;background:var(--light);overflow:hidden}
+  .wrap{height:100vh;display:flex;align-items:center;justify-content:center;padding:10px}
+
+  /* card que deve caber sem scroll */
+  .card{
+    width:760px;            /* largura similar ao print */
+    max-width:96vw;
+    height:92vh;            /* ocupa quase toda a altura da tela */
+    background:#fff;
+    border-radius:6px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    display:grid;
+    grid-template-rows: auto 1fr auto;
+    padding:10px 12px;
+    gap:8px;
+    overflow:hidden;
+  }
+
+  .title{ text-align:center; font-weight:800; font-size:22px; padding:10px 0; letter-spacing:0.6px; }
+
+  .form-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:10px;
+    align-content:start;
+    padding:6px;
+    overflow:hidden;
+  }
+
+  /* full row spans both columns */
+  .full{ grid-column: 1 / -1; }
+
+  .bar{
+    background:var(--blue);
+    color:#fff;
+    font-weight:700;
+    text-transform:uppercase;
+    font-size:12px;
+    padding:8px 6px;
+    text-align:center;
+    border-radius:4px;
+  }
+
+  .field{
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    justify-content:flex-start;
+  }
+
+  input[type="text"], input[type="number"], select{
+    margin-top:8px;
+    padding:8px;
+    border-radius:4px;
+    border:1px solid #cfcfcf;
+    font-size:13px;
+    height:36px;
+  }
+
+  .caption{
+    margin-top:6px;
+    font-size:11px;
+    color:var(--muted);
+    text-align:center;
+  }
+
+  /* Ações e rodapé */
+  .actions{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:6px;
+    gap:10px;
+  }
+
+  .btn{
+    background:var(--blue);
+    color:#fff;
+    border:none;
+    padding:10px 20px;
+    border-radius:6px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow: 0 3px 8px rgba(18,59,90,0.15);
+    min-width:160px;
+  }
+  .btn:disabled{ opacity:0.6; cursor:not-allowed }
+
+  .footer{ text-align:center; font-size:12px; color:#444; padding:6px 0; }
+
+  .msg{
+    text-align:center;
+    padding:8px 10px;
+    border-radius:6px;
+    display:none;
+    font-weight:700;
+  }
+  .msg.ok{ background:#e6f4ea; color:#0b6b3b; border:1px solid #cfead1 }
+  .msg.err{ background:#fdecea; color:#7a241f; border:1px solid #f3c6c4 }
+
+  /* Ajustes para telas com pouca altura (garante sem scroll reduzindo fontes e paddings) */
+  @media (max-height:760px){
+    .card{ height:96vh; }
+    .title{ font-size:20px }
+    .bar{ font-size:11px; padding:6px }
+    input[type="text"], select{ padding:6px; height:34px; font-size:12px }
+    .caption{ font-size:10px }
+    .btn{ padding:8px 14px; min-width:140px }
+  }
+
+  /* Mobile very narrow: permite rolar horizontalmente, mas mantém sem scroll vertical */
+  @media (max-width:520px){
+    .card{ width:96vw; height:96vh; }
+    .form-grid{ grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <form id="auditoriaForm" class="card" onsubmit="return false;">
+      <div class="title">REGISTRO DE AVARIA</div>
+
+      <div class="form-grid">
+        <!-- OR -->
+        <div class="field">
+          <div class="bar">OR</div>
+          <input type="text" name="or" id="or" placeholder='"DIGITAR NUMEROS"' required>
+          <div class="caption">"DIGITAR NUMEROS"</div>
+        </div>
+
+        <!-- NOTA FISCAL -->
+        <div class="field">
+          <div class="bar">NOTA FISCAL</div>
+          <input type="text" name="notaFiscal" id="notaFiscal" placeholder='"DIGITAR NUMEROS"'>
+          <div class="caption">"DIGITAR NUMEROS"</div>
+        </div>
+
+        <!-- PRODUTO / CÓDIGO (span full width) -->
+        <div class="field full">
+          <div class="bar">CÓDIGO</div>
+          <input type="text" name="produto" id="produto" placeholder='"BIPAR NUMEROS"'>
+          <div class="caption">"BIPAR NUMEROS"</div>
+        </div>
+
+        <!-- FORNECEDOR -->
+        <div class="field">
+          <div class="bar">FORNECEDOR</div>
+          <input type="text" name="fornecedor" id="fornecedor" placeholder='"DIGITAR NOMES"'>
+          <div class="caption">"DIGITAR NOMES"</div>
+        </div>
+
+        <!-- MARCA -->
+        <div class="field">
+          <div class="bar">MARCA</div>
+          <input type="text" name="marca" id="marca" placeholder='"DIGITAR NOMES"'>
+          <div class="caption">"DIGITAR NOMES"</div>
+        </div>
+
+        <!-- MOTIVO AVARIA -->
+        <div class="field">
+          <div class="bar">MOTIVO AVARIA</div>
+          <select name="tipoAvaria" id="tipoAvaria">
+            <option value="">-- selecione --</option>
+            <option value="MANCHA">MANCHA</option>
+            <option value="MOFO">MOFO</option>
+            <option value="RASGO">RASGO</option>
+            <option value="DESCOSTURA">DESCOSTURA</option>
+            <option value="EXCESSO DE COLA">EXCESSO DE COLA</option>
+            <option value="SOLADO DANIFICADO">SOLADO DANIFICADO</option>
+            <option value="DIVERGENCIA DE TAMANHO">DIVERGENCIA DE TAMANHO</option>
+            <option value="DIVERGENCIA DE MODELO">DIVERGENCIA DE MODELO</option>
+            <option value="LOGO DANIFICADO">LOGO DANIFICADO</option>
+            <option value="FALTA">FALTA</option>
+            <option value="VALIDADE">VALIDADE</option>
+            <option value="OUTROS">OUTROS</option>
+          </select>
+          <div class="caption">"OPÇÕES"</div>
+        </div>
+
+        <!-- QTD -->
+        <div class="field">
+          <div class="bar">QNTD.</div>
+          <input type="number" name="qntd" id="qntd" placeholder='"DIGITAR NUMEROS"' min="0">
+          <div class="caption">"DIGITAR NUMEROS"</div>
+        </div>
+
+        <!-- CATEGORIA full -->
+        <div class="field full">
+          <div class="bar">CATEGORIA</div>
+          <select name="categoria" id="categoria">
+            <option value="">-- selecione --</option>
+            <option value="CALÇADO">CALÇADO</option>
+            <option value="VESTUARIO">VESTUÁRIO</option>
+            <option value="ACESSORIO">ACESSÓRIO</option>
+            <option value="SUPLEMENTO">SUPLEMENTO</option>
+          </select>
+          <div class="caption">"OPÇÕES"</div>
+        </div>
+
+        <!-- RESPONSÁVEL full -->
+        <div class="field full">
+          <div class="bar">RESPONSÁVEL</div>
+          <input type="text" name="responsavel" id="responsavel" placeholder='"DIGITAR NOMES"'>
+          <div class="caption">"DIGITAR NOMES"</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="sendBtn" class="btn" type="button">Enviar</button>
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:center;justify-content:center;margin-bottom:4px;">
+        <div id="msgOk" class="msg ok">Registro enviado com sucesso!</div>
+        <div id="msgErr" class="msg err">Erro ao enviar — ver console.</div>
+      </div>
+
+      <div class="footer">© 2025 Futanatics (Controle de qualidade).</div>
+    </form>
+  </div>
+
+<script>
+/*
+  SUBSTITUA abaixo pela URL do seu Web App (Apps Script) AFTER deploy:
+  ex: const SCRIPT_URL = 'https://script.google.com/macros/s/XXXX/exec';
+*/
+const SCRIPT_URL = 'COLE_AQUI_SUA_URL_DO_WEBAPP';
+
+const form = document.getElementById('auditoriaForm');
+const sendBtn = document.getElementById('sendBtn');
+const msgOk = document.getElementById('msgOk');
+const msgErr = document.getElementById('msgErr');
+
+function showMsg(type){
+  msgOk.style.display = 'none';
+  msgErr.style.display = 'none';
+  if(type === 'ok') msgOk.style.display = 'block';
+  if(type === 'err') msgErr.style.display = 'block';
+}
+
+function getFormDataObj(){
+  return {
+    or: document.getElementById('or').value.trim(),
+    notaFiscal: document.getElementById('notaFiscal').value.trim(),
+    produto: document.getElementById('produto').value.trim(),
+    fornecedor: document.getElementById('fornecedor').value.trim(),
+    marca: document.getElementById('marca').value.trim(),
+    tipoAvaria: document.getElementById('tipoAvaria').value,
+    qntd: document.getElementById('qntd').value,
+    categoria: document.getElementById('categoria').value,
+    responsavel: document.getElementById('responsavel').value.trim()
+  };
+}
+
+async function submitData(){
+  // validação simples (exige OR)
+  const data = getFormDataObj();
+  if(!data.or){
+    alert('Preencha o campo OR.');
+    return;
+  }
+
+  sendBtn.disabled = true;
+  sendBtn.textContent = 'Enviando...';
+  showMsg(); // esconde mensagens
+
+  // 1) tentativa com JSON (mais limpa)
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(data)
+    });
+    const txt = await res.text();
+    // tenta parsear JSON
+    try {
+      const j = JSON.parse(txt);
+      if(j.result === 'success' || j.status === 'ok'){
+        form.reset();
+        showMsg('ok');
+        setTimeout(()=>showMsg(), 3000);
+        return;
+      } else {
+        // se não for sucesso, tenta fallback
+        console.warn('Resposta não-success:', j);
+      }
+    } catch(e){
+      // se retorno não JSON, mas servidor pode ter retornado texto. Aceitamos como sucesso se status 200.
+      if(res.ok){
+        form.reset();
+        showMsg('ok');
+        setTimeout(()=>showMsg(), 3000);
+        return;
+      }
+    }
+  } catch(err){
+    console.warn('Erro no envio JSON:', err);
+  }
+
+  // 2) fallback: enviar como FormData (algumas vezes funciona se JSON for bloqueado)
+  try {
+    const formData = new FormData();
+    for(const k in data) formData.append(k, data[k] || '');
+    const res2 = await fetch(SCRIPT_URL, { method: 'POST', body: formData });
+    const txt2 = await res2.text();
+    try {
+      const j2 = JSON.parse(txt2);
+      if(j2.result === 'success' || j2.status === 'ok'){
+        form.reset();
+        showMsg('ok');
+        setTimeout(()=>showMsg(), 3000);
+        return;
+      } else {
+        console.warn('Resposta fallback não-success:', j2);
+      }
+    } catch(e){
+      if(res2.ok){
+        form.reset();
+        showMsg('ok');
+        setTimeout(()=>showMsg(), 3000);
+        return;
+      }
+    }
+  } catch(err2){
+    console.error('Erro no fallback:', err2);
+  }
+
+  // se chegou aqui: erro
+  showMsg('err');
+  sendBtn.disabled = false;
+  sendBtn.textContent = 'Enviar';
+  console.error('Envio falhou — ver console network/erros.');
+}
+
+// bind
+sendBtn.addEventListener('click', submitData);
+</script>
+</body>
+</html>
