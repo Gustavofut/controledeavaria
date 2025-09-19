@@ -70,7 +70,14 @@
 
     <form id="briefingForm" class="card" autocomplete="off">
       <!-- IMPORTANT: Replace SCRIPT_URL and FORM_SECRET in the <script> config at the end of this file before publishing -->
+ <div class="form-group">
+    <label for="arquivos">Anexar arquivos e fotos</label>
+    <input type="file" id="arquivos" name="arquivos" multiple>
+    <small>Formatos aceitos: imagens e PDFs (máx. 10MB cada).</small>
+  </div>
 
+  <button type="submit">Enviar Briefing</button>
+</form>
       <div class="section">
         <div class="section-title"><h3>1 • Dados do Cliente e do Espaço</h3></div>
         <div class="grid">
@@ -379,33 +386,3 @@
     // Inicializa
     updateProgress();
   </script>
-<form id="briefingForm" enctype="multipart/form-data">
-  <!-- Outros campos do formulário -->
-
-  <div class="form-group">
-    <label for="arquivos">Anexar arquivos e fotos</label>
-    <input type="file" id="arquivos" name="arquivos" multiple>
-    <small>Formatos aceitos: imagens e PDFs (máx. 10MB cada).</small>
-  </div>
-
-  <button type="submit">Enviar Briefing</button>
-</form>
-
-<script>
-document.getElementById("briefingForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  let formData = new FormData(document.getElementById("briefingForm"));
-
-  fetch("URL_DO_SEU_WEBAPP", {
-    method: "POST",
-    body: formData
-  })
-  .then(response => response.text())
-  .then(msg => alert("Formulário enviado com sucesso: " + msg))
-  .catch(err => alert("Erro: " + err));
-});
-</script>
-
-
-
