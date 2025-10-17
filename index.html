@@ -51,11 +51,19 @@ document.getElementById('send').addEventListener('click', async () => {
 
   status.textContent = "⏳ Enviando para servidor...";
   try {
-    const resp = await fetch(APPS_SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ or: or, nf: nf, codvar: codvar, files: filesToSend })
-    });
+  const formData = new FormData();
+formData.append("or", or.value);
+formData.append("nf", nf.value);
+formData.append("codvar", codvar.value);
+for (const file of fileInput.files) {
+  formData.append(file.name, file); // nome do arquivo vira chave
+}
+
+fetch("https://script.google.com/macros/s/AKfycbzDDZ_TZnyU94AnLig6RQ4BmmeZ2lgHhlCqmmcy58-r70kF1tprGWsSZEm1Tw28upza/exec", {
+  method: "POST",
+  body: formData
+})
+;
     const data = await resp.json();
     if(data.success) {
       status.innerHTML = "✅ Fotos enviadas! Pasta: <a href='"+data.folderUrl+"' target='_blank'>Abrir</a>";
