@@ -1,83 +1,117 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Envio de Fotos - Avarias</title>
-<style>
-  body{font-family:Arial; background:#f4f6f8; padding:30px; display:flex; justify-content:center}
-  .card{background:#fff; padding:18px; border-radius:12px; box-shadow:0 4px 18px rgba(0,0,0,0.08); width:100%; max-width:420px}
-  input, button{width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc}
-  button{background:#0b74ff;color:white;border:0;font-weight:700}
-  #status{margin-top:12px;font-weight:600}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📸 Envio de Fotos - Avarias</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 20px 25px;
+      border-radius: 10px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      width: 350px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #status {
+      margin-top: 15px;
+      color: #333;
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
 <body>
-<div class="card">
-  <h2 style="text-align:center">📸 Envio de Fotos - Avarias</h2>
-  <input id="or" placeholder="Número da OR (obrigatório)">
-  <input id="nf" placeholder="Nota Fiscal (opcional)">
-  <input id="codvar" placeholder="COD + VARIAÇÃO (obrigatório)">
-  <input id="files" type="file" accept="image/*" multiple>
-  <button id="send">Enviar Fotos</button>
-  <div id="status"></div>
-</div>
 
-<script>
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBsBgCElybG_3f0L33uyV72WEWMsAP7sgAHFzJMqMjS25qUz3Lc73vNWQa3RpTXJlA/exec"; // <<< editar aqui
+  <div class="container">
+    <h2>📷 Envio de Fotos - Avarias</h2>
+    
+    <input type="text" id="or" placeholder="Digite o número da OR" required>
+    <input type="text" id="nf" placeholder="Digite a Nota Fiscal (opcional)">
+    <input type="text" id="codvar" placeholder="Digite o Código + Variação" required>
+    <input type="file" id="fileInput" multiple required>
+    
+    <button id="btnEnviar">Enviar Fotos</button>
+    <p id="status"></p>
+  </div>
 
-document.getElementById('send').addEventListener('click', async () => {
-  const or = document.getElementById('or').value.trim();
-  const nf = document.getElementById('nf').value.trim() || "SEM_NF";
-  const codvar = document.getElementById('codvar').value.trim();
-  const input = document.getElementById('files');
-  const status = document.getElementById('status');
+  <script>
+    document.getElementById("btnEnviar").addEventListener("click", async () => {
+      const or = document.getElementById("or").value.trim();
+      const nf = document.getElementById("nf").value.trim();
+      const codvar = document.getElementById("codvar").value.trim();
+      const fileInput = document.getElementById("fileInput");
+      const status = document.getElementById("status");
 
-  if(!or || !codvar) return alert("Preencha OR e COD+VARIAÇÃO.");
-  if(!input.files.length) return alert("Selecione pelo menos 1 foto.");
+      if (!or || !codvar || fileInput.files.length === 0) {
+        status.innerHTML = "⚠️ Preencha OR, Código+Variação e selecione as fotos.";
+        status.style.color = "red";
+        return;
+      }
 
-  status.textContent = "⏳ Convertendo imagens...";
-  const filesArr = Array.from(input.files);
-  // converte cada arquivo para base64
-  const filesToSend = await Promise.all(filesArr.map(file => new Promise((res, rej) => {
-    const fr = new FileReader();
-    fr.onload = () => {
-      const base64 = fr.result.split(',')[1]; // remove header
-      res({ filename: file.name, mimeType: file.type, base64: base64 });
-    };
-    fr.onerror = rej;
-    fr.readAsDataURL(file);
-  })));
+      status.innerHTML = "⏳ Enviando fotos...";
+      status.style.color = "#333";
 
-  status.textContent = "⏳ Enviando para servidor...";
-  try {
-  const formData = new FormData();
-formData.append("or", or.value);
-formData.append("nf", nf.value);
-formData.append("codvar", codvar.value);
-for (const file of fileInput.files) {
-  formData.append(file.name, file); // nome do arquivo vira chave
-}
+      const formData = new FormData();
+      formData.append("or", or);
+      formData.append("nf", nf);
+      formData.append("codvar", codvar);
+      for (const file of fileInput.files) {
+        formData.append(file.name, file);
+      }
 
-fetch("https://script.google.com/macros/s/AKfycbzDDZ_TZnyU94AnLig6RQ4BmmeZ2lgHhlCqmmcy58-r70kF1tprGWsSZEm1Tw28upza/exec", {
-  method: "POST",
-  body: formData
-})
-;
-    const data = await resp.json();
-    if(data.success) {
-      status.innerHTML = "✅ Fotos enviadas! Pasta: <a href='"+data.folderUrl+"' target='_blank'>Abrir</a>";
-      // opcional: limpar campos
-      document.getElementById('or').value = "";
-      document.getElementById('codvar').value = "";
-      input.value = null;
-    } else {
-      status.textContent = "❌ Erro: " + data.message;
-    }
-  } catch (err) {
-    status.textContent = "❌ Erro de rede: " + err.message;
-  }
-});
-</script>
+      try {
+        const response = await fetch("https://script.google.com/macros/s/AKfycbw6sw6XlkIZsZrQun3jAnN3AJrNDo_FiEhKrxanJUU4IrOpmXG7KkHaVsz0XApe7yyn/exec", {
+          method: "POST",
+          body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          status.innerHTML = "✅ Fotos enviadas com sucesso!<br><a href='" + result.folderUrl + "' target='_blank'>📂 Abrir pasta no Drive</a>";
+          status.style.color = "green";
+        } else {
+          status.innerHTML = "❌ " + result.message;
+          status.style.color = "red";
+        }
+
+      } catch (err) {
+        status.innerHTML = "❌ Erro de rede: " + err.message;
+        status.style.color = "red";
+      }
+    });
+  </script>
+
 </body>
 </html>
