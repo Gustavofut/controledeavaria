@@ -1,388 +1,75 @@
 <!doctype html>
-<html lang="pt-BR">
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Briefing de Interiores — Gustavo ALVES design</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --brand-blue:#0A58CA; /* Azul da marca */
-      --brand-black:#0B0B0B; /* Preto */
-      --brand-gray:#6B6B6B;   /* Cinza escuro */
-      --bg:#F4F5F7;          /* Fundo claro */
-      --card:#FFFFFF;
-      --maxwidth:1100px;
-      --radius:14px;
-      --shadow: 0 6px 30px rgba(11,11,11,0.08);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:var(--brand-black);background:linear-gradient(180deg,var(--bg),#ffffff);margin:0}
-    .container{max-width:var(--maxwidth);margin:28px auto;padding:24px}
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-    .brand{display:flex;gap:14px;align-items:center}
-    .logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--brand-blue),#2356ff);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:18px}
-    h1{margin:0;font-size:20px}
-    p.lead{margin:0;color:var(--brand-gray)}
-
-    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;margin-bottom:18px}
-    form .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-    @media (max-width:880px){form .grid{grid-template-columns:1fr}}
-    label{display:block;font-size:13px;color:var(--brand-gray);margin-bottom:6px}
-    input[type=text],input[type=email],input[type=number],select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e6e6;font-size:14px;background:transparent}
-    textarea{min-height:120px;resize:vertical}
-    .section-title{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-    .small{font-size:13px;color:var(--brand-gray)}
-
-    .btn{background:var(--brand-blue);color:white;padding:10px 16px;border-radius:10px;border:0;font-weight:600;cursor:pointer}
-    .btn.secondary{background:transparent;color:var(--brand-blue);border:1px solid rgba(10,88,202,0.12)}
-    .muted{color:var(--brand-gray);font-size:13px}
-
-    .checklist{display:flex;flex-direction:column;gap:6px}
-    .checklist label{display:flex;align-items:center;gap:10px;background:#fafafa;padding:8px;border-radius:8px}
-
-    .progress-wrap{display:flex;align-items:center;gap:12px}
-    .progress{height:10px;background:#eee;border-radius:999px;flex:1;overflow:hidden}
-    .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--brand-blue),#2d7bff);width:0%}
-
-    footer.small{font-size:13px;color:var(--brand-gray);text-align:center;margin-top:10px}
-
-    /* FAQ */
-    .faq details{border-radius:10px;padding:12px;margin-bottom:8px;background:#fff}
-    .faq summary{cursor:pointer;font-weight:600}
-
-    /* success/error */
-    .toast{position:fixed;right:20px;bottom:20px;background:#0B0B0B;color:#fff;padding:12px 16px;border-radius:10px;box-shadow:0 8px 30px rgba(11,11,11,0.15);display:none}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Envio de Fotos - Avarias</title>
+<style>
+  body{font-family:Arial; background:#f4f6f8; padding:30px; display:flex; justify-content:center}
+  .card{background:#fff; padding:18px; border-radius:12px; box-shadow:0 4px 18px rgba(0,0,0,0.08); width:100%; max-width:420px}
+  input, button{width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc}
+  button{background:#0b74ff;color:white;border:0;font-weight:700}
+  #status{margin-top:12px;font-weight:600}
+</style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="brand">
-        <div class="logo">GA</div>
-        <div>
-          <h1>Briefing de Interiores — Gustavo ALVES design</h1>
-          <p class="lead">Formulário completo para briefing de projetos online (responda com o máximo de detalhes).</p>
-        </div>
-      </div>
-      <div class="muted">Versão: 1.0</div>
-    </header>
+<div class="card">
+  <h2 style="text-align:center">📸 Envio de Fotos - Avarias</h2>
+  <input id="or" placeholder="Número da OR (obrigatório)">
+  <input id="nf" placeholder="Nota Fiscal (opcional)">
+  <input id="codvar" placeholder="COD + VARIAÇÃO (obrigatório)">
+  <input id="files" type="file" accept="image/*" multiple>
+  <button id="send">Enviar Fotos</button>
+  <div id="status"></div>
+</div>
 
-    <form id="briefingForm" class="card" autocomplete="off">
-      <!-- IMPORTANT: Replace SCRIPT_URL and FORM_SECRET in the <script> config at the end of this file before publishing -->
- <div class="form-group">
-    <label for="arquivos">Anexar arquivos e fotos</label>
-    <input type="file" id="arquivos" name="arquivos" multiple>
-    <small>Formatos aceitos: imagens e PDFs (máx. 10MB cada).</small>
-  </div>
+<script>
+const APPS_SCRIPT_URL = "COLE_AQUI_O_URL_DO_SEU_WEB_APP"; // <<< editar aqui
 
-  <button type="submit">Enviar Briefing</button>
-</form>
-      <div class="section">
-        <div class="section-title"><h3>1 • Dados do Cliente e do Espaço</h3></div>
-        <div class="grid">
-          <div>
-            <label>Nome completo *</label>
-            <input type="text" name="clientName" required />
-          </div>
-          <div>
-            <label>Email *</label>
-            <input type="email" name="clientEmail" required />
-          </div>
-          <div>
-            <label>Telefone/WhatsApp</label>
-            <input type="text" name="clientPhone" />
-          </div>
-          <div>
-            <label>Pessoa de contato (se diferente)</label>
-            <input type="text" name="contactPerson" />
-          </div>
-          <div>
-            <label>Endereço / Local do projeto</label>
-            <input type="text" name="address" />
-          </div>
-          <div>
-            <label>Tipo de espaço *</label>
-            <select name="spaceType" required>
-              <option value="">Selecione</option>
-              <option>Residencial - Apartamento</option>
-              <option>Residencial - Casa</option>
-              <option>Comercial - Loja</option>
-              <option>Comercial - Escritório</option>
-              <option>Outro</option>
-            </select>
-          </div>
-          <div>
-            <label>Área aproximada (m²)</label>
-            <input type="number" name="areaSqm" min="0" step="1" />
-          </div>
-          <div>
-            <label>Plantas/medidas disponíveis?</label>
-            <select name="hasPlans">
-              <option value="">Selecione</option>
-              <option>Sim</option>
-              <option>Não</option>
-            </select>
-          </div>
-          <div>
-            <label>Fotos do espaço (links ou Google Drive)</label>
-            <input type="text" name="photoLinks" placeholder="cole links separados por vírgula" />
-          </div>
-          <div>
-            <label>Documentos / referências (links)</label>
-            <input type="text" name="docsLinks" placeholder="links, Pinterest, pastas" />
-          </div>
-        </div>
-      </div>
+document.getElementById('send').addEventListener('click', async () => {
+  const or = document.getElementById('or').value.trim();
+  const nf = document.getElementById('nf').value.trim() || "SEM_NF";
+  const codvar = document.getElementById('codvar').value.trim();
+  const input = document.getElementById('files');
+  const status = document.getElementById('status');
 
-      <div style="height:12px"></div>
+  if(!or || !codvar) return alert("Preencha OR e COD+VARIAÇÃO.");
+  if(!input.files.length) return alert("Selecione pelo menos 1 foto.");
 
-      <div class="section">
-        <div class="section-title"><h3>2 • Objetivos do Projeto</h3></div>
-        <div class="card" style="padding:14px;margin-bottom:12px">
-          <label>Qual o principal objetivo do projeto? *</label>
-          <textarea name="projectObjective" required placeholder="ex.: renovar salas para locação; ampliar área útil; modernizar layout"></textarea>
-          <div style="height:10px"></div>
-          <label>Prioridades (marque as que se aplicam)</label>
-          <div class="checklist" id="prioChecklist">
-            <label><input type="checkbox" name="priorities" value="Melhorar funcionalidade" /> Melhorar funcionalidade</label>
-            <label><input type="checkbox" name="priorities" value="Estética / Renovação" /> Estética / Renovação</label>
-            <label><input type="checkbox" name="priorities" value="Otimizar armazenamento" /> Otimizar armazenamento</label>
-            <label><input type="checkbox" name="priorities" value="Aumentar valor do imóvel" /> Aumentar valor do imóvel</label>
-            <label><input type="checkbox" name="priorities" value="Preparar para aluguel/airbnb" /> Preparar para aluguel/airbnb</label>
-          </div>
-        </div>
-      </div>
+  status.textContent = "⏳ Convertendo imagens...";
+  const filesArr = Array.from(input.files);
+  // converte cada arquivo para base64
+  const filesToSend = await Promise.all(filesArr.map(file => new Promise((res, rej) => {
+    const fr = new FileReader();
+    fr.onload = () => {
+      const base64 = fr.result.split(',')[1]; // remove header
+      res({ filename: file.name, mimeType: file.type, base64: base64 });
+    };
+    fr.onerror = rej;
+    fr.readAsDataURL(file);
+  })));
 
-      <div style="height:12px"></div>
-
-      <div class="section">
-        <div class="section-title"><h3>3 • Preferências Estéticas e Funcionais</h3></div>
-        <div class="grid">
-          <div>
-            <label>Estilo preferido (ex.: contemporâneo, minimalista, industrial)</label>
-            <input type="text" name="stylePreferences" />
-          </div>
-          <div>
-            <label>Paleta de cores desejada</label>
-            <input type="text" name="colorPreferences" placeholder="ex.: tons neutros com toques de azul" />
-          </div>
-          <div>
-            <label>Materiais preferidos</label>
-            <input type="text" name="materials" placeholder="ex.: madeira, aço, mármore" />
-          </div>
-          <div>
-            <label>Móveis/itens que devem ser mantidos</label>
-            <input type="text" name="itemsKeep" />
-          </div>
-          <div style="grid-column:1/3">
-            <label>Que funcionalidades são essenciais? (ex.: home office, espaço pets, área de serviço) *</label>
-            <textarea name="essentialFunctions" required></textarea>
-          </div>
-        </div>
-      </div>
-
-      <div style="height:12px"></div>
-
-      <div class="section">
-        <div class="section-title"><h3>4 • Restrições e Orçamento</h3></div>
-        <div class="grid">
-          <div>
-            <label>Restrições técnicas (estrutural, elétrica, hidráulica)</label>
-            <textarea name="technicalRestrictions"></textarea>
-          </div>
-          <div>
-            <label>Restrições legais / condomínio</label>
-            <textarea name="legalRestrictions"></textarea>
-          </div>
-          <div>
-            <label>Orçamento estimado (R$)</label>
-            <input type="text" name="budget" placeholder="faixa ou valor exato" />
-          </div>
-          <div>
-            <label>Condições de pagamento desejadas</label>
-            <input type="text" name="paymentTerms" />
-          </div>
-        </div>
-      </div>
-
-      <div style="height:12px"></div>
-
-      <div class="section">
-        <div class="section-title"><h3>5 • Prazos e Cronograma</h3></div>
-        <div class="grid">
-          <div>
-            <label>Data ideal de início</label>
-            <input type="text" name="startDate" placeholder="dd/mm/aaaa" />
-          </div>
-          <div>
-            <label>Data de entrega desejada</label>
-            <input type="text" name="endDate" placeholder="dd/mm/aaaa" />
-          </div>
-          <div style="grid-column:1/3">
-            <label>Observações sobre disponibilidade para visitas e reuniões</label>
-            <textarea name="availability"></textarea>
-          </div>
-        </div>
-      </div>
-
-      <div style="height:12px"></div>
-
-      <div class="section">
-        <div class="section-title"><h3>Checklist final — Garanta que estes pontos sejam preenchidos</h3></div>
-        <div class="card">
-          <div class="progress-wrap" style="margin-bottom:12px">
-            <div class="small">Progresso do checklist</div>
-            <div class="progress"><i id="progressBar"></i></div>
-            <div class="small" id="progressPct">0%</div>
-          </div>
-          <div class="checklist" id="finalChecklist">
-            <label><input type="checkbox" name="checklist" value="Nome e contato" /> Nome e contato</label>
-            <label><input type="checkbox" name="checklist" value="Fotos/plantas" /> Fotos/plantas</label>
-            <label><input type="checkbox" name="checklist" value="Objetivos claros" /> Objetivos claros</label>
-            <label><input type="checkbox" name="checklist" value="Orçamento informado" /> Orçamento informado</label>
-            <label><input type="checkbox" name="checklist" value="Prazos" /> Prazos</label>
-            <label><input type="checkbox" name="checklist" value="Restrições" /> Restrições (técnicas/condomínio)</label>
-          </div>
-        </div>
-      </div>
-
-      <div style="height:12px"></div>
-
-      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
-        <div style="display:flex;gap:10px;align-items:center">
-          <button type="button" class="btn secondary" id="previewBtn">Visualizar (JSON)</button>
-          <button type="reset" class="btn secondary">Limpar</button>
-        </div>
-        <div style="display:flex;gap:10px">
-          <button type="submit" class="btn" id="submitBtn">Enviar briefing</button>
-        </div>
-      </div>
-
-    </form>
-
-    <div class="card faq">
-      <h3>Perguntas Frequentes</h3>
-      <details>
-        <summary>Como as respostas chegam na planilha?</summary>
-        <div class="small">Os dados são enviados para um script do Google Apps Script que grava automaticamente em uma planilha do Google Sheets. Você precisa publicar esse script como Web App e colar a URL no campo indicado no código.</div>
-      </details>
-      <details>
-        <summary>Posso anexar fotos diretamente?</summary>
-        <div class="small">Nesta versão sugerimos colar links para as imagens (Drive/Dropbox/Pinterest). Envio direto de arquivos exige configuração adicional (upload para Drive via Apps Script) — posso adicionar se quiser.</div>
-      </details>
-      <details>
-        <summary>Como proteger o formulário contra envios indevidos?</summary>
-        <div class="small">O script usa um token secreto (hidden) que você deve alterar no código do formulário e no Apps Script. Para maior segurança, você pode usar validação adicional ou autenticação.</div>
-      </details>
-    </div>
-
-    <footer class="small">Design & Formulário — Gustavo ALVES design</footer>
-  </div>
-
-  <div class="toast" id="toast"></div>
-
-  <script>
-    // CONFIGURE ESTES VALORES ANTES DE PUBLICAR
-    const SCRIPT_URL = '1DRHchrWg3sT-c707gCpDnfliqD0eNuoVMwlzIaIojlo'; // <-- substitua pela URL do Apps Script (web app)
-    const FORM_SECRET = '123';   // <-- escolha um token secreto e substitua em ambos os códigos
-
-    // UTIL: mostra mensagens rápidas
-    function showToast(msg, ok=true){
-      const t = document.getElementById('toast');
-      t.style.background = ok ? 'var(--brand-black)' : '#B00020';
-      t.textContent = msg; t.style.display='block';
-      setTimeout(()=>t.style.display='none', 4200);
-    }
-
-    // Atualiza barra de progresso do checklist
-    function updateProgress(){
-      const checks = Array.from(document.querySelectorAll('#finalChecklist input[type=checkbox]'));
-      const total = checks.length;
-      const done = checks.filter(c=>c.checked).length;
-      const pct = Math.round((done/total)*100);
-      document.getElementById('progressBar').style.width = pct+'%';
-      document.getElementById('progressPct').textContent = pct+'%';
-    }
-    document.querySelectorAll('#finalChecklist input[type=checkbox]').forEach(i=>i.addEventListener('change', updateProgress));
-
-    // Agrupa valores de checkbox com mesmo name em array
-    function collectCheckboxes(form, name){
-      return Array.from(form.querySelectorAll('[name="'+name+'"]')).filter(i=>i.checked).map(i=>i.value);
-    }
-
-    // Reúne todos os dados do formulário e retorna um objeto
-    function gatherData(){
-      const f = document.getElementById('briefingForm');
-      const data = {};
-      const fd = new FormData(f);
-      for(const pair of fd.entries()){
-        const k = pair[0];
-        const v = pair[1];
-        // se já existe e não for checklist
-        if(data[k] && !Array.isArray(data[k])) data[k] = [data[k]];
-        if(Array.isArray(data[k])) data[k].push(v);
-        else data[k] = v;
-      }
-      // campos de checkbox múltiplo com mesmo name (priorities, checklist)
-      data['priorities'] = collectCheckboxes(f, 'priorities');
-      data['checklist'] = collectCheckboxes(f, 'checklist');
-      // normalize empty strings
-      Object.keys(data).forEach(k=>{ if(typeof data[k] === 'string' && data[k].trim()==='') data[k] = ''});
-      // inclui token secreto
-      data['formSecret'] = FORM_SECRET;
-      return data;
-    }
-
-    document.getElementById('previewBtn').addEventListener('click', ()=>{
-      const data = gatherData();
-      const w = window.open('about:blank','_blank');
-      w.document.write('<pre>'+JSON.stringify(data,null,2)+'</pre>');
+  status.textContent = "⏳ Enviando para servidor...";
+  try {
+    const resp = await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ or: or, nf: nf, codvar: codvar, files: filesToSend })
     });
-
-    document.getElementById('briefingForm').addEventListener('submit', async (ev)=>{
-      ev.preventDefault();
-      const sendBtn = document.getElementById('submitBtn');
-      sendBtn.disabled = true; sendBtn.textContent = 'Enviando...';
-
-      const data = gatherData();
-
-      // validação mínima
-      if(!data.clientName || !data.clientEmail || !data.spaceType){
-        showToast('Por favor preencha nome, email e tipo de espaço.', false);
-        sendBtn.disabled = false; sendBtn.textContent = 'Enviar briefing';
-        return;
-      }
-
-      if(!SCRIPT_URL || SCRIPT_URL.includes('REPLACE_WITH')){
-        showToast('Configure a variável SCRIPT_URL dentro do código antes de publicar.', false);
-        sendBtn.disabled = false; sendBtn.textContent = 'Enviar briefing';
-        return;
-      }
-
-      try{
-        const res = await fetch(SCRIPT_URL, {
-          method:'POST',
-          mode: 'cors',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify(data)
-        });
-        const resJson = await res.json();
-        if(resJson && resJson.status === 'success'){
-          showToast('Briefing enviado com sucesso!');
-          document.getElementById('briefingForm').reset();
-          updateProgress();
-        } else {
-          showToast('Erro ao enviar: '+(resJson && resJson.message?resJson.message:'resposta inesperada'), false);
-        }
-      } catch(err){
-        console.error(err);
-        showToast('Falha no envio — verifique console / Apps Script (CORS ou URL).', false);
-      }
-
-      sendBtn.disabled = false; sendBtn.textContent = 'Enviar briefing';
-    });
-
-    // Inicializa
-    updateProgress();
-  </script>
+    const data = await resp.json();
+    if(data.success) {
+      status.innerHTML = "✅ Fotos enviadas! Pasta: <a href='"+data.folderUrl+"' target='_blank'>Abrir</a>";
+      // opcional: limpar campos
+      document.getElementById('or').value = "";
+      document.getElementById('codvar').value = "";
+      input.value = null;
+    } else {
+      status.textContent = "❌ Erro: " + data.message;
+    }
+  } catch (err) {
+    status.textContent = "❌ Erro de rede: " + err.message;
+  }
+});
+</script>
+</body>
+</html>
